@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, async_sessi
 from sqlalchemy.exc import SQLAlchemyError
 from loguru import logger
 from fastapi import Depends
+from fastapi_clean.models import *  # noqa: F401 -> All models need to be imported so that the relevant tables can be created
+from fastapi_clean.models import BaseModel
 
 # Will fail loudly if environment variable is not there
 DB_URL = os.environ["DB_URL"]
@@ -14,6 +16,9 @@ class DBSession:
 
 engine: AsyncEngine = create_async_engine(DB_URL, pool_pre_ping=True)
 session_factory = async_sessionmaker(engine, class_=AsyncEngine, expire_on_commit=False)
+
+async with engine.begin() as temp_connection:
+    temp_connection.run_sync(BaseModel.metadata.create_all)
 
 
 async def _get_session() -> AsyncEngine:
