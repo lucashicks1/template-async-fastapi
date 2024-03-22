@@ -11,6 +11,9 @@ fastapi = {extras = ["all"], version = "^0.110.0"}
 pydantic = "^2.6.4"
 uvicorn = "^0.29.0"
 sqlalchemy = "^2.0.28"
+loguru = "^0.7.2"
+
+[tool.ruff]
 
 
 [build-system]
