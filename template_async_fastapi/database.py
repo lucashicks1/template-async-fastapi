@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, async_sessi
 from sqlalchemy.exc import SQLAlchemyError
 from loguru import logger
 from fastapi import Depends
-from fastapi_clean.models import *  # noqa: F401 -> All models need to be imported so that the relevant tables can be created
-from fastapi_clean.models import BaseModel
+from template_async_fastapi.models import *  # noqa: F401, F403
+from template_async_fastapi.models import BaseModel
 
 # Will fail loudly if environment variable is not there
 DB_URL = os.environ["DB_URL"]

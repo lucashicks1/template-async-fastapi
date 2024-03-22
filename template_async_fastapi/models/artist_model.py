@@ -1,9 +1,9 @@
-from fastapi_clean.models.base_model import BaseModel, UUIDMixin
+from template_async_fastapi.models.base_model import BaseModel, UUIDMixin
 from sqlalchemy.orm import Mapped,relationship
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from fastapi_clean.models.song_model import SongModel
+    from template_async_fastapi.models.song_model import SongModel
 
 
 class ArtistModel(BaseModel, UUIDMixin):
