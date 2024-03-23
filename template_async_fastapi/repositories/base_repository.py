@@ -8,25 +8,27 @@ from pydantic import BaseModel as SchemaBaseModel
 from template_async_fastapi.exceptions import NotFoundException
 
 Model = TypeVar("Model", bound=BaseModel)
+SchemaModel = TypeVar("SchemaModel", bound=SchemaBaseModel)
 
 
-class BaseRepository(ABC, Generic[Model]):
+class BaseRepository(ABC, Generic[Model, SchemaModel]):
     db: DB
     model: Model
 
+    @abstractmethod
     def __init__(self, model: type(Model), db: DB = Depends()) -> None:
         self.db = db
         self.model = model
 
-    @abstractmethod
-    async def get(self, uuid: UUID) -> SchemaBaseModel:
+    async def get(self, uuid: UUID) -> SchemaModel:
         result: Model | None = await self.db.get(self.model, uuid)
         if not result:
             raise NotFoundException()
         return SchemaBaseModel(**result.normalise())
 
     @abstractmethod
-    async def create(self, data: dict) -> SchemaBaseModel:
+    async def create(self, data: dict) -> SchemaModel:
+        # noinspection PyCallingNonCallable
         model_instance: Model = self.model(**data)
         self.db.add(model_instance)
         await self.db.commit()
@@ -34,7 +36,7 @@ class BaseRepository(ABC, Generic[Model]):
         return SchemaBaseModel(**model_instance.normalise())
 
     @abstractmethod
-    async def update(self, uuid: UUID, data: dict) -> SchemaBaseModel:
+    async def update(self, uuid: UUID, data: dict) -> SchemaModel:
         result: Model | None = await self.db.get(self.model, uuid)
         if not result:
             raise NotFoundException
@@ -44,14 +46,9 @@ class BaseRepository(ABC, Generic[Model]):
         await self.db.refresh(result)
         return SchemaBaseModel(**result.normalise())
 
-    @abstractmethod
     async def delete(self, uuid: UUID) -> None:
         result: Model | None = await self.db.get(self.model, uuid)
         if not result:
             raise NotFoundException
         await self.db.delete(result)
         await self.db.commit()
-
-
-
-
