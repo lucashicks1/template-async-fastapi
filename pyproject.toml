@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-clean"
+name = "template-fastapi-async"
 version = "0.1.0"
 description = ""
 authors = ["lucashicks1 <lucasjhicks1@gmail.com>"]
