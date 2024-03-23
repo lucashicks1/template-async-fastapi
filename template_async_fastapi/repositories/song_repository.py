@@ -14,7 +14,7 @@ class SongRepository(BaseRepository[SongModel, SongInDB]):
         super().__init__(SongModel, db)
 
     async def create(self, data: SongCreate) -> SongInDB:
-        return await super().create(data.model_dump())
+        return await super().create(data)
 
     async def update(self, uuid: UUID, data: SongUpdate) -> SongInDB:
-        return await super().update(uuid, data.model_dump())
+        return await super().update(uuid, data)

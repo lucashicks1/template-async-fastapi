@@ -13,7 +13,7 @@ class ArtistRepository(BaseRepository[ArtistModel, ArtistInDB]):
         super().__init__(ArtistModel, db)
 
     async def create(self, data: ArtistCreate) -> ArtistInDB:
-        return await super().create(data.model_dump())
+        return await super().create(data)
 
     async def update(self, uuid: UUID, data: ArtistUpdate) -> ArtistInDB:
-        return await super().update(uuid, data.model_dump())
+        return await super().update(uuid, data)

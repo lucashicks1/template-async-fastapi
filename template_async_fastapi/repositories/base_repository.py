@@ -23,24 +23,24 @@ class BaseRepository(ABC, Generic[Model, SchemaModel]):
     async def get(self, uuid: UUID) -> SchemaModel:
         result: Model | None = await self.db.get(self.model, uuid)
         if not result:
-            raise NotFoundException()
+            raise NotFoundException("Item not in repository")
         return SchemaBaseModel(**result.normalise())
 
     @abstractmethod
-    async def create(self, data: dict) -> SchemaModel:
+    async def create(self, data: SchemaBaseModel) -> SchemaModel:
         # noinspection PyCallingNonCallable
-        model_instance: Model = self.model(**data)
+        model_instance: Model = self.model(**data.model_dump())
         self.db.add(model_instance)
         await self.db.commit()
         await self.db.refresh(model_instance)
         return SchemaBaseModel(**model_instance.normalise())
 
     @abstractmethod
-    async def update(self, uuid: UUID, data: dict) -> SchemaModel:
+    async def update(self, uuid: UUID, data: SchemaBaseModel) -> SchemaModel:
         result: Model | None = await self.db.get(self.model, uuid)
         if not result:
-            raise NotFoundException
-        for key, value in data.items():
+            raise NotFoundException("Item not in repository")
+        for key, value in data.model_dump().items():
             setattr(result, key, value)
         await self.db.commit()
         await self.db.refresh(result)
