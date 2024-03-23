@@ -1,5 +1,5 @@
 from template_async_fastapi.models.base_model import BaseModel, UUIDMixin
-from sqlalchemy.orm import Mapped,relationship
+from sqlalchemy.orm import Mapped, relationship
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

@@ -1,3 +1,4 @@
+from datetime import date
 from uuid import UUID
 from template_async_fastapi.models.base_model import BaseModel
 from template_async_fastapi.models.base_model import UUIDMixin
@@ -12,6 +13,7 @@ class SongModel(BaseModel, UUIDMixin):
 
     name: Mapped[str]
     duration: Mapped[int]
+    release_date: Mapped[date]
     artist_uuid: Mapped[UUID] = mapped_column(ForeignKey(ArtistModel.uuid))
 
     artist: Mapped[ArtistModel] = relationship(back_populates="songs", lazy="dynamic")
